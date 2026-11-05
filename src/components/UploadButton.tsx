@@ -21,12 +21,15 @@ const STATUS_LABEL: Record<Status, string> = {
   error:       'Error al subir. Intenta de nuevo.',
 };
 
+// Vidrio MARFIL casi opaco: antes era transparente con saturación alta y tomaba el
+// color de la foto de atrás (sobre un piso de madera salía naranja). Así se ve igual
+// sobre cualquier foto y respeta la paleta de la invitación.
 const circleGlass = {
-  background: 'rgba(255,255,255,0.28)',
-  backdropFilter: 'blur(28px) saturate(180%) brightness(1.08)',
-  WebkitBackdropFilter: 'blur(28px) saturate(180%) brightness(1.08)',
-  border: '1px solid rgba(255,255,255,0.45)',
-  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.55), 0 4px 20px rgba(0,0,0,0.12)',
+  background: 'rgba(250,246,239,0.86)',
+  backdropFilter: 'blur(18px)',
+  WebkitBackdropFilter: 'blur(18px)',
+  border: '1px solid rgba(181,150,138,0.45)',
+  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.9), 0 6px 22px rgba(60,51,43,0.18)',
 };
 
 export default function UploadButton({ guestName, onUploadSuccess }: UploadButtonProps) {
@@ -215,11 +218,11 @@ export default function UploadButton({ guestName, onUploadSuccess }: UploadButto
             style={circleGlass}
           >
             {isProcessing
-              ? <Loader2 size={22} className="text-primary/55 animate-spin" />
-              : <ImageIcon size={22} className="text-primary/60" />
+              ? <Loader2 size={22} className="text-[var(--accent-dark)] animate-spin" />
+              : <ImageIcon size={23} className="text-[var(--accent-dark)]" />
             }
           </div>
-          <span className="text-[8.5px] tracking-[0.12em] text-primary/40 font-sans leading-none">
+          <span className="text-[9px] font-semibold tracking-[0.14em] uppercase text-[var(--accent-dark)] font-sans leading-none px-2 py-1 rounded-full" style={{ background: 'rgba(250,246,239,0.88)' }}>
             Galería
           </span>
         </motion.button>
@@ -239,10 +242,10 @@ export default function UploadButton({ guestName, onUploadSuccess }: UploadButto
           >
             {isProcessing
               ? <Loader2 size={24} className="text-primary/65 animate-spin" />
-              : <Camera size={24} className="text-primary/65" />
+              : <Camera size={24} className="text-[var(--accent-dark)]" />
             }
           </div>
-          <span className="text-[8.5px] tracking-[0.12em] text-primary/40 font-sans leading-none">
+          <span className="text-[9px] font-semibold tracking-[0.14em] uppercase text-[var(--accent-dark)] font-sans leading-none px-2 py-1 rounded-full" style={{ background: 'rgba(250,246,239,0.88)' }}>
             Cámara
           </span>
         </motion.button>

@@ -42,7 +42,7 @@ export default function WelcomeScreen({ onJoin }: WelcomeScreenProps) {
 
   return (
     <div
-      className="relative flex flex-col items-center justify-between min-h-[100dvh] overflow-hidden"
+      className="relative flex flex-col items-center justify-center min-h-[100dvh] overflow-hidden py-10"
       style={{ background: 'radial-gradient(ellipse 120% 80% at 50% 0%, #FDFAF5 0%, #F7F2EA 45%, #EFE7DA 100%)' }}
     >
       {/* ── Foto de fondo (si la hay) ── */}
@@ -58,6 +58,18 @@ export default function WelcomeScreen({ onJoin }: WelcomeScreenProps) {
           />
         </div>
       )}
+
+      {/* ── Marco doble, como el filo de la invitación impresa (sin foto, viste la pantalla) ── */}
+      <motion.div
+        aria-hidden="true"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.2, duration: 1.4 }}
+        className="pointer-events-none absolute inset-3 rounded-[26px] z-0"
+        style={{ border: '1px solid rgba(165,162,156,0.45)' }}
+      >
+        <div className="absolute inset-[6px] rounded-[21px]" style={{ border: '1px solid rgba(181,150,138,0.28)' }} />
+      </motion.div>
 
       {/* ── Nombre enorme de marca de agua ── */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
@@ -95,7 +107,7 @@ export default function WelcomeScreen({ onJoin }: WelcomeScreenProps) {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
-            className="z-10 text-center px-8 pt-16 pb-0 w-full max-w-[440px]"
+            className="z-10 text-center px-8 pt-2 pb-0 w-full max-w-[440px]"
           >
             {/* Fecha entre reglas de plata */}
             <motion.div
@@ -104,11 +116,11 @@ export default function WelcomeScreen({ onJoin }: WelcomeScreenProps) {
               transition={{ delay: 0.25 }}
               className="flex items-center justify-center gap-3 mb-7"
             >
-              <div className="h-[1px] w-8 bg-[var(--silver)]/45" />
-              <span className="text-[8px] tracking-[0.5em] uppercase text-[var(--muted-foreground)]/65 font-sans font-medium whitespace-nowrap">
+              <div className="h-[1px] w-8 bg-[var(--silver)]/60" />
+              <span className="text-[9px] tracking-[0.5em] uppercase text-[var(--muted-foreground)] font-sans font-medium whitespace-nowrap">
                 {EVENT.fechaCorta}
               </span>
-              <div className="h-[1px] w-8 bg-[var(--silver)]/45" />
+              <div className="h-[1px] w-8 bg-[var(--silver)]/60" />
             </motion.div>
 
             <motion.div
@@ -117,7 +129,7 @@ export default function WelcomeScreen({ onJoin }: WelcomeScreenProps) {
               transition={{ delay: 0.4, duration: 1 }}
               className="flex justify-center mb-5"
             >
-              <CruzOrnamento className="w-[26px] h-[42px] text-[var(--silver)]/70" />
+              <CruzOrnamento className="w-[28px] h-[46px] text-[var(--accent)]" />
             </motion.div>
 
             <h1 className="leading-[1.05]">
@@ -139,8 +151,8 @@ export default function WelcomeScreen({ onJoin }: WelcomeScreenProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.9, duration: 1 }}
-              className="mt-6 mx-auto max-w-[290px] font-heading italic text-[var(--muted-foreground)]/90 leading-relaxed"
-              style={{ fontSize: 'clamp(0.82rem, 3.4vw, 0.95rem)' }}
+              className="mt-6 mx-auto max-w-[300px] font-heading italic text-[var(--foreground)]/80 leading-relaxed"
+              style={{ fontSize: 'clamp(0.95rem, 3.9vw, 1.05rem)' }}
             >
               «{EVENT.versiculo.texto}»
             </motion.p>
@@ -148,7 +160,7 @@ export default function WelcomeScreen({ onJoin }: WelcomeScreenProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.1 }}
-              className="mt-2.5 text-[8px] tracking-[0.45em] uppercase text-[var(--accent)] font-sans"
+              className="mt-3 text-[9px] font-medium tracking-[0.45em] uppercase text-[var(--accent-dark)] font-sans"
             >
               {EVENT.versiculo.cita}
             </motion.p>
@@ -163,7 +175,7 @@ export default function WelcomeScreen({ onJoin }: WelcomeScreenProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.75, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-            className="z-10 w-full max-w-[360px] px-8 pb-12 pt-10"
+            className="z-10 w-full max-w-[360px] px-8 pb-4 pt-8"
           >
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="relative group">
@@ -174,7 +186,7 @@ export default function WelcomeScreen({ onJoin }: WelcomeScreenProps) {
                   placeholder="Tu nombre"
                   value={name}
                   onChange={e => setName(e.target.value)}
-                  className="w-full px-0 pt-6 pb-6 bg-transparent border-b border-[var(--silver)]/40 outline-none text-center text-[1.3rem] transition-colors duration-500 placeholder:text-[var(--muted-foreground)]/35 text-[var(--foreground)] font-heading italic tracking-wide focus:border-[var(--accent)]/70"
+                  className="w-full px-0 pt-6 pb-6 bg-transparent border-b border-[var(--silver)]/60 outline-none text-center text-[1.3rem] transition-colors duration-500 placeholder:text-[var(--muted-foreground)]/60 text-[var(--foreground)] font-heading italic tracking-wide focus:border-[var(--accent)]/70"
                 />
                 <div className="absolute bottom-0 left-0 w-0 h-[1px] bg-[var(--accent)] origin-left transition-all duration-500 group-focus-within:w-full" />
               </div>
@@ -183,14 +195,12 @@ export default function WelcomeScreen({ onJoin }: WelcomeScreenProps) {
                 whileHover={{ scale: 1.012 }}
                 whileTap={{ scale: 0.985 }}
                 type="submit"
-                className="w-full py-[17px] text-[10px] font-semibold tracking-[0.3em] uppercase rounded-2xl transition-all duration-300"
+                className="w-full py-[17px] text-[11px] font-semibold tracking-[0.3em] uppercase rounded-2xl transition-all duration-300"
                 style={{
-                  background: 'rgba(255,255,255,0.55)',
-                  backdropFilter: 'blur(28px) saturate(180%)',
-                  WebkitBackdropFilter: 'blur(28px) saturate(180%)',
-                  border: '1px solid rgba(181,150,138,0.35)',
-                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.9), 0 8px 28px rgba(140,111,99,0.13)',
-                  color: 'var(--accent-dark)',
+                  background: 'linear-gradient(180deg, #B5968A 0%, #9E7F73 100%)',
+                  border: '1px solid rgba(140,111,99,0.6)',
+                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.35), 0 10px 26px rgba(140,111,99,0.28)',
+                  color: '#FFFDF9',
                 }}
               >
                 Entrar a la Galería
@@ -201,7 +211,7 @@ export default function WelcomeScreen({ onJoin }: WelcomeScreenProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.5 }}
-              className="mt-7 text-center text-[8px] tracking-[0.38em] uppercase text-[var(--muted-foreground)]/65 font-sans"
+              className="mt-6 text-center text-[9px] tracking-[0.38em] uppercase text-[var(--muted-foreground)] font-sans"
             >
               Comparte tus fotos de este día
             </motion.p>

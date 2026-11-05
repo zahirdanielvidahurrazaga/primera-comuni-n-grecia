@@ -212,6 +212,24 @@ y limpiada después (la base quedó en ceros):
 
 Falta probarlo en **teléfono real** — eso lo hace Zahir.
 
+## Estado al 2026-11-04
+
+- **Publicada en `https://pc-grecia.pages.dev`** (Cloudflare Pages, desde GitHub).
+- **QR generado** con esa URL: `public/qr.png` + `qr-card.html` (4 por hoja A4).
+- **Anti-pausa:** `.github/workflows/mantener-activo.yml` consulta Supabase cada
+  2 días (GitHub Actions). Se puede correr a mano en GitHub → Actions → "Mantener
+  activa la galería" → Run workflow. GitHub la apaga si el repo pasa 60 días sin commits.
+- **Token del llavero `Supabase Grecia` renovado** (el anterior había caducado).
+- Bienvenida pulida: composición centrada (antes había un hueco grande entre el
+  versículo y el nombre), textos chicos con más contraste, cruz en rosa palo y
+  botón "Entrar" relleno en rosa palo con letra marfil.
+- **Va SIN foto de Grecia** (decisión 4-nov): la bienvenida lleva un **marco doble
+  fino** (plata + rosa palo) como el filo de la invitación impresa.
+- Botones de subir (Galería/Cámara): vidrio **marfil casi opaco** con ícono rosa palo
+  y etiqueta en píldora. Antes eran transparentes con saturación alta y tomaban el
+  color de la foto de atrás (sobre madera salían naranjas).
+- Admin: `https://pc-grecia.pages.dev/#admin` · código `2026`.
+
 ## Lo que falta
 
 1. **Capturar las variables en Cloudflare Pages** al desplegar
@@ -220,7 +238,6 @@ Falta probarlo en **teléfono real** — eso lo hace Zahir.
    Se guarda en `public/grecia.jpg` y se activa poniendo
    `const HERO_PHOTO = '/grecia.jpg'` en `src/components/WelcomeScreen.tsx`
    (hoy está en `null` y la pantalla se sostiene sola).
-3. **Desplegar** en Cloudflare Pages y generar el QR con la URL real.
-   (Decisión del 2026-09-20: se queda en LOCAL hasta que Zahir lo apruebe.)
+3. ~~Desplegar y generar el QR~~ → hecho (ver arriba).
 4. **Confirmar la hora** de la misa: la invitación no la trae.
-5. **Despertar Supabase** unos días antes del 28 de noviembre (ver arriba).
+5. ~~Despertar Supabase~~ → lo hace la tarea de GitHub; igual entrar a la galería 1-2 días antes para confirmar.

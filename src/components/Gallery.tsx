@@ -229,7 +229,7 @@ export default function Gallery({ refreshKey }: { refreshKey?: number }) {
       />
 
       <div className="mt-20 text-center pb-4">
-        <p className="text-[8.5px] tracking-[0.5em] uppercase text-[var(--muted-foreground)]/40 font-sans">
+        <p className="text-[9px] tracking-[0.5em] uppercase text-[var(--accent-dark)]/80 font-sans">
           {EVENT.hashtag}
         </p>
       </div>
