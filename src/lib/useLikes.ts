@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
-import { supabase, getGuestKey, type PhotoLike } from './supabase';
+import { supabase, getGuestKey, traerCorazones, type PhotoLike } from './supabase';
 
 /**
  * Corazones de las fotos.
@@ -16,8 +16,8 @@ export function useLikes() {
   const guestKey = useRef(getGuestKey());
 
   const fetchLikes = useCallback(async () => {
-    const { data, error } = await supabase.from('photo_likes').select('photo_id, guest_key');
-    if (error) return;
+    const data = await traerCorazones(); // de 1,000 en 1,000 (la API corta en 1,000)
+    if (!data) return;
 
     const nextCounts: Record<string, number> = {};
     const nextMine = new Set<string>();

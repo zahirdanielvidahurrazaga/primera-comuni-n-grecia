@@ -229,6 +229,14 @@ Falta probarlo en **teléfono real** — eso lo hace Zahir.
   y etiqueta en píldora. Antes eran transparentes con saturación alta y tomaban el
   color de la foto de atrás (sobre madera salían naranjas).
 - Admin: `https://pc-grecia.pages.dev/#admin` · código `2026`.
+- **Arreglos traídos de la boda de Diana & Antonio** (4-nov): "← Galería" del panel
+  ya regresa (`main.tsx` escucha `hashchange`); fotos y corazones **paginados de
+  1,000 en 1,000** (`traerFotos`/`traerCorazones` en `lib/supabase.ts`; antes la
+  galería cortaba en 300 y el panel en 1,000) y la galería ya no se vacía si falla
+  la red; borrar desde el panel **quita también el archivo** del bucket; en el
+  teléfono el panel muestra siempre nombre y bote de basura (no hay hover);
+  descargar en el teléfono abre el **menú de compartir → Guardar en Fotos**; el ZIP
+  limpia nombres raros y **avisa si faltó alguna foto**.
 
 ## Lo que falta
 

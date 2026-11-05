@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MasonryPhotoAlbum } from 'react-photo-album';
 import 'react-photo-album/masonry.css';
-import { supabase, type Photo } from '@/lib/supabase';
+import { supabase, type Photo, traerFotos } from '@/lib/supabase';
 import { useLikes } from '@/lib/useLikes';
 import { EVENT } from '@/lib/event';
 import Lightbox from './Lightbox';
@@ -69,20 +69,11 @@ export default function Gallery({ refreshKey }: { refreshKey?: number }) {
     };
   }, []);
 
+  // Todas las fotos (antes cortaba en 300). Si falla la red, se queda lo que ya se veía.
   const fetchPhotos = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('photos')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(300);
-      if (error) throw error;
-      setPhotos(data || []);
-    } catch {
-      setPhotos([]);
-    } finally {
-      setLoading(false);
-    }
+    const todas = await traerFotos();
+    if (todas) setPhotos(todas);
+    setLoading(false);
   };
 
   const formattedPhotos = useMemo<AlbumPhoto[]>(() => photos.map(p => ({

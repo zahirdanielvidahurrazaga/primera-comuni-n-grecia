@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Trash2, Download, Camera, Users, Heart, Loader2 } from 'lucide-react';
-import { supabase, type Photo } from '@/lib/supabase';
+import { supabase, traerFotos, traerCorazones, rutaEnBucket, type Photo } from '@/lib/supabase';
 import { EVENT } from '@/lib/event';
 
 export default function AdminPage() {
@@ -32,15 +32,13 @@ export default function AdminPage() {
   const fetchAll = async () => {
     setLoading(true);
     try {
-      const [photosRes, likesRes] = await Promise.all([
-        supabase.from('photos').select('*').order('created_at', { ascending: false }),
-        supabase.from('photo_likes').select('photo_id'),
-      ]);
-      if (photosRes.error) throw photosRes.error;
-      setPhotos(photosRes.data || []);
+      // Todo paginado: la API de Supabase corta cada consulta en 1,000 filas.
+      const [fotos, corazones] = await Promise.all([traerFotos(), traerCorazones()]);
+      if (!fotos) throw new Error('No se pudieron cargar las fotos');
+      setPhotos(fotos);
 
       const totals: Record<string, number> = {};
-      for (const row of likesRes.data ?? []) {
+      for (const row of corazones ?? []) {
         totals[row.photo_id] = (totals[row.photo_id] ?? 0) + 1;
       }
       setLikeTotals(totals);
@@ -53,8 +51,12 @@ export default function AdminPage() {
 
   const handleDelete = async (id: string) => {
     try {
+      const foto = photos.find(p => p.id === id);
       const { error } = await supabase.from('photos').delete().match({ id });
       if (error) throw error;
+      // También el archivo del bucket (antes se quedaba ocupando espacio).
+      const ruta = foto ? rutaEnBucket(foto.url, EVENT.bucket) : null;
+      if (ruta) await supabase.storage.from(EVENT.bucket).remove([ruta]);
       setPhotos(prev => prev.filter(p => p.id !== id));
     } catch (err) {
       alert(`Error al eliminar: ${err instanceof Error ? err.message : 'desconocido'}`);
@@ -69,14 +71,15 @@ export default function AdminPage() {
     try {
       const JSZip = (await import('jszip')).default;
       const zip = new JSZip();
+      let fallas = 0;
       for (let i = 0; i < photos.length; i++) {
         try {
           const res = await fetch(photos[i].url);
           const blob = await res.blob();
           const ext = blob.type.includes('png') ? 'png' : 'jpg';
-          zip.file(`${photos[i].guest_name}_${i + 1}.${ext}`, blob);
+          zip.file(`${photos[i].guest_name.replace(/[\\/:*?"<>|]+/g, '-')}_${i + 1}.${ext}`, blob);
         } catch {
-          // si una foto falla, seguimos con las demás
+          fallas++; // si una foto falla, seguimos con las demás y se avisa al final
         }
       }
       const content = await zip.generateAsync({ type: 'blob' });
@@ -87,7 +90,8 @@ export default function AdminPage() {
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      setTimeout(() => URL.revokeObjectURL(url), 60_000); // Safari la necesita viva un rato
+      if (fallas > 0) alert(`Se descargaron ${photos.length - fallas} de ${photos.length} fotos. ${fallas === 1 ? 'Una no se pudo bajar' : `${fallas} no se pudieron bajar`}; intenta de nuevo con mejor señal.`);
     } catch {
       alert('Error al generar el ZIP. Intenta de nuevo.');
     } finally {
@@ -239,7 +243,7 @@ export default function AdminPage() {
                   </div>
                 )}
 
-                <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/75 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3 pointer-events-none">
+                <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/75 to-transparent opacity-100 [@media(hover:hover)]:opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3 pointer-events-none">
                   <p className="text-[8px] tracking-[0.2em] uppercase text-white/50 font-sans">De</p>
                   <p className="text-white font-heading italic text-sm">{photo.guest_name}</p>
                   {photo.message && (
@@ -271,10 +275,10 @@ export default function AdminPage() {
                   <button
                     onClick={() => setDeleteConfirm(photo.id)}
                     aria-label="Eliminar foto"
-                    className="absolute top-2 right-2 w-8 h-8 rounded-full flex items-center justify-center text-white/70 hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100"
+                    className="absolute top-2 right-2 w-10 h-10 rounded-full flex items-center justify-center text-white/90 hover:text-red-400 transition-colors opacity-100 [@media(hover:hover)]:opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
                     style={{ background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(8px)' }}
                   >
-                    <Trash2 size={13} />
+                    <Trash2 size={15} />
                   </button>
                 )}
               </motion.div>
